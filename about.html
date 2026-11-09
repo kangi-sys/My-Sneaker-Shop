@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Kangis</title>
+    <style>
+        :root {
+            --nav: #78d6dc;          /* turquoise nav bar */
+            --ink: #0a2b2e;          /* deep teal text */
+            --bg: #0c2f38;           /* dark teal backdrop */
+            --bg-deep: #081d24;
+            --card: rgba(255, 255, 255, 0.07);
+            --text: #eaf8f9;
+            --muted: #b5dde1;
+            --neon-pink: #ff5c7a;    /* neon sign glow */
+            --neon-cyan: #5ee6ee;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            min-height: 100vh;
+            font-family: "Times New Roman", Times, serif;
+            color: var(--text);
+            background:
+                radial-gradient(ellipse at 15% 25%, rgba(255, 92, 122, 0.22), transparent 55%),
+                radial-gradient(ellipse at 85% 80%, rgba(94, 230, 238, 0.18), transparent 55%),
+                linear-gradient(180deg, var(--bg), var(--bg-deep));
+            background-attachment: fixed;
+        }
+
+        /* Navigation – matches the rest of the site */
+        nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 56px;
+            padding: 14px 20px 18px;
+            background: var(--nav);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+        }
+
+        nav a {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: var(--ink);
+            text-decoration: none;
+            transition: color 0.2s ease, text-shadow 0.2s ease;
+        }
+
+        nav a:hover,
+        nav a[aria-current="page"] {
+            color: #c4284a;
+            text-shadow: 0 0 12px rgba(255, 92, 122, 0.45);
+        }
+
+        main {
+            display: flex;
+            justify-content: center;
+            padding: 72px 24px;
+        }
+
+        .about {
+            position: relative;
+            max-width: 700px;
+            width: 100%;
+            padding: 60px 56px;
+            text-align: center;
+            background: var(--card);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(94, 230, 238, 0.45);
+            border-radius: 6px;
+            box-shadow:
+                0 0 40px rgba(94, 230, 238, 0.12),
+                0 30px 80px rgba(0, 0, 0, 0.5);
+            animation: rise 0.9s ease-out both;
+        }
+
+        /* neon corner accents */
+        .about::before,
+        .about::after {
+            content: "";
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border: 2px solid var(--neon-pink);
+            filter: drop-shadow(0 0 6px rgba(255, 92, 122, 0.8));
+        }
+        .about::before { top: 12px; left: 12px; border-right: 0; border-bottom: 0; }
+        .about::after { bottom: 12px; right: 12px; border-left: 0; border-top: 0; }
+
+        .eyebrow {
+            font-family: system-ui, sans-serif;
+            font-size: 0.74rem;
+            font-weight: 600;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--neon-pink);
+            text-shadow: 0 0 10px rgba(255, 92, 122, 0.6);
+            margin-bottom: 14px;
+        }
+
+        h1 {
+            font-size: clamp(2.6rem, 7vw, 3.8rem);
+            font-weight: 700;
+            line-height: 1.1;
+            color: #fff;
+            text-shadow:
+                0 0 10px rgba(94, 230, 238, 0.55),
+                0 0 28px rgba(94, 230, 238, 0.3);
+            margin-bottom: 22px;
+        }
+
+        .divider {
+            width: 90px;
+            height: 2px;
+            margin: 0 auto 30px;
+            background: linear-gradient(90deg, transparent, var(--neon-pink), transparent);
+            box-shadow: 0 0 10px rgba(255, 92, 122, 0.7);
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.85;
+            color: var(--muted);
+        }
+
+        p strong {
+            color: var(--neon-cyan);
+            font-weight: 700;
+        }
+
+        @keyframes rise {
+            from { opacity: 0; transform: translateY(18px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 640px) {
+            nav { gap: 22px; }
+            nav a { font-size: 1.25rem; }
+            main { padding: 40px 16px; }
+            .about { padding: 48px 26px; }
+            p { font-size: 1.08rem; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .about { animation: none; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="signup.html">Sign up</a>
+        <a href="about.html" aria-current="page">About</a>
+        <a href="landing.html">Landing</a>
+        <a href="contact.html">Contact Us</a>
+    </nav>
+
+    <main>
+        <section class="about">
+            <div class="eyebrow">Our Story</div>
+            <h1>About Kangis</h1>
+            <div class="divider" aria-hidden="true"></div>
+            <p>
+                At <strong>Kangis</strong>, we believe great shoes start with confidence. Every pair is designed to blend everyday comfort with bold, modern style, so you can step out looking sharp and feeling even better. We pay close attention to quality materials and craftsmanship, creating footwear that lasts beyond the trend cycle. Whether you're heading to work, out with friends, or making a statement on the street, Kangis puts you in shoes worth walking in.
+            </p>
+        </section>
+    </main>
+</body>
+</html>

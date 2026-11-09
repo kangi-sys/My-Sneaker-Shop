@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kangis | Sign Up & Log In</title>
+    <style>
+        :root {
+            --nav: #78d6dc;
+            --ink: #0a2b2e;
+            --bg: #0c2f38;
+            --bg-deep: #081d24;
+            --card: rgba(255, 255, 255, 0.07);
+            --text: #eaf8f9;
+            --muted: #b5dde1;
+            --neon-pink: #ff5c7a;
+            --neon-cyan: #5ee6ee;
+            --error: #ff8fa3;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            min-height: 100vh;
+            font-family: "Times New Roman", Times, serif;
+            color: var(--text);
+            background:
+                radial-gradient(ellipse at 15% 20%, rgba(255, 92, 122, 0.22), transparent 55%),
+                radial-gradient(ellipse at 85% 80%, rgba(94, 230, 238, 0.18), transparent 55%),
+                linear-gradient(180deg, var(--bg), var(--bg-deep));
+            background-attachment: fixed;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 56px;
+            padding: 14px 20px 18px;
+            background: var(--nav);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+        }
+        nav a {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: var(--ink);
+            text-decoration: none;
+            transition: color 0.2s ease, text-shadow 0.2s ease;
+        }
+        nav a:hover,
+        nav a[aria-current="page"] {
+            color: #c4284a;
+            text-shadow: 0 0 12px rgba(255, 92, 122, 0.45);
+        }
+
+        main {
+            display: flex;
+            justify-content: center;
+            padding: 56px 20px 80px;
+        }
+
+        .auth {
+            position: relative;
+            width: 100%;
+            max-width: 480px;
+            padding: 44px 40px 40px;
+            background: var(--card);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(94, 230, 238, 0.45);
+            border-radius: 8px;
+            box-shadow: 0 0 40px rgba(94, 230, 238, 0.12), 0 30px 80px rgba(0, 0, 0, 0.5);
+            animation: rise 0.8s ease-out both;
+        }
+        .auth::before,
+        .auth::after {
+            content: "";
+            position: absolute;
+            width: 28px;
+            height: 28px;
+            border: 2px solid var(--neon-pink);
+            filter: drop-shadow(0 0 6px rgba(255, 92, 122, 0.8));
+            pointer-events: none;
+        }
+        .auth::before { top: 12px; left: 12px; border-right: 0; border-bottom: 0; }
+        .auth::after { bottom: 12px; right: 12px; border-left: 0; border-top: 0; }
+
+        .head { text-align: center; margin-bottom: 26px; }
+        .eyebrow {
+            font-family: system-ui, sans-serif;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--neon-pink);
+            text-shadow: 0 0 10px rgba(255, 92, 122, 0.6);
+            margin-bottom: 10px;
+        }
+        h1 {
+            font-size: 2.5rem;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(94, 230, 238, 0.55), 0 0 26px rgba(94, 230, 238, 0.3);
+        }
+        .head p {
+            margin-top: 8px;
+            color: var(--muted);
+            font-size: 1.05rem;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            padding: 5px;
+            margin-bottom: 28px;
+            background: rgba(0, 0, 0, 0.28);
+            border-radius: 6px;
+        }
+        .tab {
+            font-family: system-ui, sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 12px;
+            border: 0;
+            border-radius: 4px;
+            background: transparent;
+            color: var(--muted);
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .tab:hover { color: #fff; }
+        .tab[aria-selected="true"] {
+            background: var(--nav);
+            color: var(--ink);
+            box-shadow: 0 0 16px rgba(94, 230, 238, 0.35);
+        }
+        .tab:focus-visible { outline: 2px solid var(--neon-pink); outline-offset: 2px; }
+
+        /* Forms */
+        form[hidden] { display: none; }
+        .field { margin-bottom: 18px; }
+        label {
+            display: block;
+            font-family: system-ui, sans-serif;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 7px;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="password"] {
+            width: 100%;
+            padding: 13px 14px;
+            font-family: system-ui, sans-serif;
+            font-size: 1rem;
+            color: #fff;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(94, 230, 238, 0.35);
+            border-radius: 4px;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        input::placeholder { color: rgba(181, 221, 225, 0.5); }
+        input:focus {
+            outline: none;
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 0 3px rgba(94, 230, 238, 0.2), 0 0 16px rgba(94, 230, 238, 0.25);
+        }
+        input[aria-invalid="true"] { border-color: var(--error); }
+
+        .pw-wrap { position: relative; }
+        .pw-wrap input { padding-right: 70px; }
+        .toggle-pw {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-family: system-ui, sans-serif;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--neon-cyan);
+            background: none;
+            border: 0;
+            padding: 8px;
+            cursor: pointer;
+        }
+        .toggle-pw:hover { color: #fff; }
+
+        .error {
+            min-height: 1.1em;
+            margin-top: 6px;
+            font-family: system-ui, sans-serif;
+            font-size: 0.8rem;
+            color: var(--error);
+        }
+
+        /* Password strength */
+        .strength {
+            display: flex;
+            gap: 5px;
+            margin-top: 8px;
+        }
+        .strength span {
+            flex: 1;
+            height: 4px;
+            border-radius: 2px;
+            background: rgba(255, 255, 255, 0.15);
+            transition: background 0.25s ease;
+        }
+        .strength[data-level="1"] span:nth-child(-n+1) { background: var(--neon-pink); }
+        .strength[data-level="2"] span:nth-child(-n+2) { background: #ffb347; }
+        .strength[data-level="3"] span:nth-child(-n+3) { background: var(--neon-cyan); }
+        .strength[data-level="4"] span:nth-child(-n+4) { background: #7dffb0; }
+        .strength-label {
+            margin-top: 5px;
+            font-family: system-ui, sans-serif;
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+
+        .row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 22px;
+            font-family: system-ui, sans-serif;
+            font-size: 0.88rem;
+            color: var(--muted);
+        }
+        .check {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            cursor: pointer;
+            line-height: 1.4;
+        }
+        .check input { accent-color: var(--neon-pink); margin-top: 3px; width: 16px; height: 16px; }
+        .check label { all: unset; cursor: pointer; }
+        a { color: var(--neon-cyan); }
+        a:hover { color: var(--neon-pink); }
+
+        .submit {
+            width: 100%;
+            padding: 15px;
+            font-family: system-ui, sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--ink);
+            background: var(--nav);
+            border: 0;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+        }
+        .submit:hover {
+            background: var(--neon-pink);
+            color: #fff;
+            box-shadow: 0 0 22px rgba(255, 92, 122, 0.6);
+        }
+        .submit:active { transform: translateY(1px); }
+        .submit:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+
+        .status {
+            margin-top: 18px;
+            padding: 12px 14px;
+            border-radius: 4px;
+            font-family: system-ui, sans-serif;
+            font-size: 0.9rem;
+            text-align: center;
+            color: var(--neon-cyan);
+            background: rgba(94, 230, 238, 0.1);
+            border: 1px solid rgba(94, 230, 238, 0.4);
+        }
+        .status[hidden] { display: none; }
+
+        .switch {
+            margin-top: 22px;
+            text-align: center;
+            font-size: 1rem;
+            color: var(--muted);
+        }
+        .switch button {
+            font: inherit;
+            font-weight: 700;
+            color: var(--neon-cyan);
+            background: none;
+            border: 0;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .switch button:hover { color: var(--neon-pink); }
+
+        @keyframes rise {
+            from { opacity: 0; transform: translateY(18px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 640px) {
+            nav { gap: 22px; }
+            nav a { font-size: 1.25rem; }
+            main { padding: 32px 14px 60px; }
+            .auth { padding: 38px 22px 32px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .auth { animation: none; }
+            * { transition: none !important; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="signup.html" aria-current="page">Sign up</a>
+        <a href="about.html">About</a>
+        <a href="landing.html">Landing</a>
+        <a href="contact.html">Contact Us</a>
+    </nav>
+
+    <main>
+        <section class="auth">
+            <div class="head">
+                <div class="eyebrow">Kangis Members</div>
+                <h1 id="title">Join Kangis</h1>
+                <p id="subtitle">Create an account to get started.</p>
+            </div>
+
+            <div class="tabs" role="tablist" aria-label="Account options">
+                <button class="tab" role="tab" id="tab-signup" aria-controls="signup-form" aria-selected="true">New Customer</button>
+                <button class="tab" role="tab" id="tab-login" aria-controls="login-form" aria-selected="false" tabindex="-1">Log In</button>
+            </div>
+
+            <!-- SIGN UP -->
+            <form id="signup-form" role="tabpanel" aria-labelledby="tab-signup" novalidate>
+                <div class="field">
+                    <label for="su-name">Full name</label>
+                    <input type="text" id="su-name" name="name" autocomplete="name" placeholder="Jane Wanjiku" required>
+                    <div class="error" id="su-name-err"></div>
+                </div>
+
+                <div class="field">
+                    <label for="su-email">Email</label>
+                    <input type="email" id="su-email" name="email" autocomplete="email" placeholder="you@example.com" required>
+                    <div class="error" id="su-email-err"></div>
+                </div>
+
+                <div class="field">
+                    <label for="su-phone">Phone number</label>
+                    <input type="tel" id="su-phone" name="phone" autocomplete="tel" placeholder="07XX XXX XXX" required>
+                    <div class="error" id="su-phone-err"></div>
+                </div>
+
+                <div class="field">
+                    <label for="su-pass">Password</label>
+                    <div class="pw-wrap">
+                        <input type="password" id="su-pass" name="password" autocomplete="new-password" placeholder="At least 8 characters" required>
+                        <button type="button" class="toggle-pw" data-target="su-pass" aria-label="Show password">Show</button>
+                    </div>
+                    <div class="strength" id="strength" data-level="0" aria-hidden="true">
+                        <span></span><span></span><span></span><span></span>
+                    </div>
+                    <div class="strength-label" id="strength-label">Use 8+ characters with a mix of letters, numbers and symbols.</div>
+                    <div class="error" id="su-pass-err"></div>
+                </div>
+
+                <div class="field">
+                    <label for="su-confirm">Confirm password</label>
+                    <div class="pw-wrap">
+                        <input type="password" id="su-confirm" name="confirm" autocomplete="new-password" placeholder="Re-enter password" required>
+                        <button type="button" class="toggle-pw" data-target="su-confirm" aria-label="Show password">Show</button>
+                    </div>
+                    <div class="error" id="su-confirm-err"></div>
+                </div>
+
+                <div class="row">
+                    <div class="check">
+                        <input type="checkbox" id="su-terms" required>
+                        <label for="su-terms">I agree to the Terms &amp; Privacy Policy</label>
+                    </div>
+                </div>
+                <div class="error" id="su-terms-err" style="margin-top:-14px;margin-bottom:14px;"></div>
+
+                <button type="submit" class="submit">Create Account</button>
+            </form>
+
+            <!-- LOG IN -->
+            <form id="login-form" role="tabpanel" aria-labelledby="tab-login" hidden novalidate>
+                <div class="field">
+                    <label for="li-email">Email</label>
+                    <input type="email" id="li-email" name="email" autocomplete="email" placeholder="you@example.com" required>
+                    <div class="error" id="li-email-err"></div>
+                </div>
+
+                <div class="field">
+                    <label for="li-pass">Password</label>
+                    <div class="pw-wrap">
+                        <input type="password" id="li-pass" name="password" autocomplete="current-password" placeholder="Your password" required>
+                        <button type="button" class="toggle-pw" data-target="li-pass" aria-label="Show password">Show</button>
+                    </div>
+                    <div class="error" id="li-pass-err"></div>
+                </div>
+
+                <div class="row">
+                    <div class="check">
+                        <input type="checkbox" id="li-remember">
+                        <label for="li-remember">Remember me</label>
+                    </div>
+                    <a href="contact.html">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="submit">Log In</button>
+            </form>
+
+            <div class="status" id="status" role="status" aria-live="polite" hidden></div>
+
+            <p class="switch" id="switch">
+                Already a customer? <button type="button" id="switch-btn">Log in</button>
+            </p>
+        </section>
+    </main>
+
+    <script>
+        const tabSignup = document.getElementById('tab-signup');
+        const tabLogin = document.getElementById('tab-login');
+        const signupForm = document.getElementById('signup-form');
+        const loginForm = document.getElementById('login-form');
+        const title = document.getElementById('title');
+        const subtitle = document.getElementById('subtitle');
+        const switchText = document.getElementById('switch');
+        const status = document.getElementById('status');
+
+        /* ---------- Tab switching ---------- */
+        function showTab(which) {
+            const isSignup = which === 'signup';
+            tabSignup.setAttribute('aria-selected', isSignup);
+            tabLogin.setAttribute('aria-selected', !isSignup);
+            tabSignup.tabIndex = isSignup ? 0 : -1;
+            tabLogin.tabIndex = isSignup ? -1 : 0;
+            signupForm.hidden = !isSignup;
+            loginForm.hidden = isSignup;
+            title.textContent = isSignup ? 'Join Kangis' : 'Welcome Back';
+            subtitle.textContent = isSignup
+                ? 'Create an account to get started.'
+                : 'Log in to see your orders and favourites.';
+            switchText.innerHTML = isSignup
+                ? 'Already a customer? <button type="button" id="switch-btn">Log in</button>'
+                : 'New to Kangis? <button type="button" id="switch-btn">Create an account</button>';
+            document.getElementById('switch-btn').addEventListener('click', () => showTab(isSignup ? 'login' : 'signup'));
+            status.hidden = true;
+        }
+        tabSignup.addEventListener('click', () => showTab('signup'));
+        tabLogin.addEventListener('click', () => showTab('login'));
+        document.getElementById('switch-btn').addEventListener('click', () => showTab('login'));
+
+        // Arrow-key navigation between tabs
+        [tabSignup, tabLogin].forEach(tab => {
+            tab.addEventListener('keydown', e => {
+                if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+                    const next = tab === tabSignup ? tabLogin : tabSignup;
+                    next.click();
+                    next.focus();
+                }
+            });
+        });
+
+        /* ---------- Show / hide password ---------- */
+        document.querySelectorAll('.toggle-pw').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const input = document.getElementById(btn.dataset.target);
+                const show = input.type === 'password';
+                input.type = show ? 'text' : 'password';
+                btn.textContent = show ? 'Hide' : 'Show';
+                btn.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+            });
+        });
+
+        /* ---------- Password strength ---------- */
+        const strengthEl = document.getElementById('strength');
+        const strengthLabel = document.getElementById('strength-label');
+        const labels = ['', 'Weak', 'Fair', 'Good', 'Strong'];
+
+        document.getElementById('su-pass').addEventListener('input', e => {
+            const v = e.target.value;
+            let score = 0;
+            if (v.length >= 8) score++;
+            if (/[a-z]/.test(v) && /[A-Z]/.test(v)) score++;
+            if (/\d/.test(v)) score++;
+            if (/[^A-Za-z0-9]/.test(v)) score++;
+            if (!v) score = 0;
+            strengthEl.dataset.level = score;
+            strengthLabel.textContent = v
+                ? 'Password strength: ' + labels[Math.max(score, 1)]
+                : 'Use 8+ characters with a mix of letters, numbers and symbols.';
+        });
+
+        /* ---------- Validation helpers ---------- */
+        function setError(inputId, errId, msg) {
+            const input = document.getElementById(inputId);
+            document.getElementById(errId).textContent = msg;
+            if (input) input.setAttribute('aria-invalid', msg ? 'true' : 'false');
+            return !msg;
+        }
+        const emailOk = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+        const phoneOk = v => /^(\+?254|0)?[17]\d{8}$/.test(v.replace(/[\s-]/g, ''));
+
+        function showStatus(msg) {
+            status.textContent = msg;
+            status.hidden = false;
+        }
+
+        /* ---------- Member accounts & session (browser-only) ---------- */
+        const USERS_KEY = 'kangis_users';
+        const SESSION_KEY = 'kangis_session';
+
+        function getUsers() {
+            try { return JSON.parse(localStorage.getItem(USERS_KEY)) || {}; }
+            catch (err) { return {}; }
+        }
+        const toHex = buf => Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+
+        async function hashPassword(password, saltHex) {
+            const enc = new TextEncoder();
+            const keyMaterial = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveBits']);
+            const salt = Uint8Array.from(saltHex.match(/.{2}/g).map(h => parseInt(h, 16)));
+            const bits = await crypto.subtle.deriveBits(
+                { name: 'PBKDF2', salt, iterations: 100000, hash: 'SHA-256' }, keyMaterial, 256
+            );
+            return toHex(bits);
+        }
+
+        function startSession(user, remember) {
+            localStorage.removeItem(SESSION_KEY);
+            sessionStorage.removeItem(SESSION_KEY);
+            const data = JSON.stringify({ name: user.name, email: user.email });
+            (remember ? localStorage : sessionStorage).setItem(SESSION_KEY, data);
+            window.location.href = 'landing.html';
+        }
+
+        /* ---------- Sign up ---------- */
+        signupForm.addEventListener('submit', async e => {
+            e.preventDefault();
+            const name = document.getElementById('su-name').value.trim();
+            const email = document.getElementById('su-email').value.trim();
+            const phone = document.getElementById('su-phone').value.trim();
+            const pass = document.getElementById('su-pass').value;
+            const confirm = document.getElementById('su-confirm').value;
+            const terms = document.getElementById('su-terms').checked;
+
+            const results = [
+                setError('su-name', 'su-name-err', name.length < 2 ? 'Please enter your full name.' : ''),
+                setError('su-email', 'su-email-err', !emailOk(email) ? 'Enter a valid email address.' : ''),
+                setError('su-phone', 'su-phone-err', !phoneOk(phone) ? 'Enter a valid Kenyan phone number.' : ''),
+                setError('su-pass', 'su-pass-err', pass.length < 8 ? 'Password must be at least 8 characters.' : ''),
+                setError('su-confirm', 'su-confirm-err', confirm !== pass ? 'Passwords do not match.' : ''),
+                setError('su-terms', 'su-terms-err', !terms ? 'Please accept the terms to continue.' : '')
+            ];
+            if (results.includes(false)) { status.hidden = true; return; }
+
+            /* NOTE: accounts are currently stored in this browser only (password is
+               salted + hashed, never saved as plain text). For real, cross-device accounts,
+               replace this block with a call to your backend (Firebase Auth, Supabase, etc.). */
+            const users = getUsers();
+            const key = email.toLowerCase();
+            if (users[key]) {
+                setError('su-email', 'su-email-err', 'An account with this email already exists. Please log in.');
+                status.hidden = true;
+                return;
+            }
+            try {
+                const salt = toHex(crypto.getRandomValues(new Uint8Array(16)));
+                const hash = await hashPassword(pass, salt);
+                users[key] = { name, email: key, phone, salt, hash };
+                localStorage.setItem(USERS_KEY, JSON.stringify(users));
+                startSession(users[key], true);
+            } catch (err) {
+                showStatus('Sorry, we could not create your account. Please try again.');
+            }
+        });
+
+        /* ---------- Log in ---------- */
+        loginForm.addEventListener('submit', async e => {
+            e.preventDefault();
+            const email = document.getElementById('li-email').value.trim();
+            const pass = document.getElementById('li-pass').value;
+
+            const results = [
+                setError('li-email', 'li-email-err', !emailOk(email) ? 'Enter a valid email address.' : ''),
+                setError('li-pass', 'li-pass-err', !pass ? 'Please enter your password.' : '')
+            ];
+            if (results.includes(false)) { status.hidden = true; return; }
+
+            /* NOTE: this checks against accounts saved in this browser. For real accounts,
+               verify { email, password } with your backend instead. */
+            const user = getUsers()[email.toLowerCase()];
+            try {
+                const ok = user && (await hashPassword(pass, user.salt)) === user.hash;
+                if (!ok) {
+                    setError('li-pass', 'li-pass-err', 'Incorrect email or password.');
+                    status.hidden = true;
+                    return;
+                }
+                startSession(user, document.getElementById('li-remember').checked);
+            } catch (err) {
+                showStatus('Sorry, we could not log you in. Please try again.');
+            }
+        });
+
+        /* ---------- Message for visitors sent here from the landing page ---------- */
+        if (new URLSearchParams(window.location.search).get('next') === 'landing') {
+            showStatus('Please sign up or log in to view our shoes in stock.');
+        }
+    </script>
+</body>
+</html>
