@@ -5,18 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
     <style>
+        body{
+            margin: 0;
+            font-family: "Times New Roman", Times, serif;
+        }
+
         .hero{
-            height: 800px;
-            background-image: url(https://i.pinimg.com/736x/cf/e4/57/cfe457bf65be5a66dbb1d395937af797.jpg);
+            position: relative;
+            min-height: 90vh;
+            background-image: url(images/hero.jpg.jpeg);
             background-size: cover;
             background-position: center;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 45px;
-            font-weight: bold;
-            color: rgb(7, 21, 21);
+            padding: 20px;
+            text-align: center;
         }
+
+        /* Dark overlay so the heading stands out but the photo still shows */
+        .hero::before{
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                180deg,
+                rgba(8, 29, 36, 0.35) 0%,
+                rgba(8, 29, 36, 0.55) 50%,
+                rgba(8, 29, 36, 0.35) 100%
+            );
+        }
+
+        .hero h1{
+            position: relative;      /* sits on top of the overlay */
+            margin: 0;
+            font-size: clamp(2.2rem, 7vw, 4.5rem);
+            font-weight: bold;
+            color: #ffffff;
+            text-shadow:
+                0 2px 6px rgba(0, 0, 0, 0.8),
+                0 0 18px rgba(94, 230, 238, 0.7),
+                0 0 42px rgba(94, 230, 238, 0.45);
+        }
+
         nav{
             background-color: rgba(108, 213, 217, 0.963);
             padding: 15px;
@@ -25,6 +56,9 @@
             list-style: none;
             display: flex;
             justify-content: center;
+            flex-wrap: wrap;
+            margin: 0;
+            padding: 0;
         }
         nav ul li{
             margin: 0 25px;
@@ -35,14 +69,21 @@
             color: rgb(57, 51, 43);
             font-weight: bold;
         }
-        nav ul li a:hover{
+        nav ul li a:hover,
+        nav ul li a[aria-current="page"]{
             color: blueviolet;
+        }
+
+        @media (max-width: 640px){
+            nav ul li{ margin: 6px 14px; }
+            nav ul li a{ font-size: 20px; }
         }
     </style>
 </head>
 <body>
     <nav>
         <ul>
+            <li><a href="index.html" aria-current="page">Home</a></li>
             <li><a href="signup.html">Sign up</a></li>
             <li><a href="about.html">About</a></li>
             <li><a href="landing.html">Landing</a></li>
@@ -52,7 +93,5 @@
     <section class="hero">
         <h1>Welcome To My Store</h1>
     </section>
-
-    
 </body>
 </html>
